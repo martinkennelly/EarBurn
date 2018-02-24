@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/IRCClient.iml" filepath="$PROJECT_DIR$/IRCClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EarBurn.iml" filepath="$PROJECT_DIR$/EarBurn.iml" />
     </modules>
   </component>
 </project>
