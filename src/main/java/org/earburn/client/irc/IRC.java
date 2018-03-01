@@ -277,18 +277,42 @@ public class IRC extends Thread {
                     System.out.println("Unknown string from server: " + line);
             }
         } else {
-            //TODO Messaging between users
+            //3.3.1 Private messages of IRC protocol
+            String control = "\\u0001";
+            if (lineSplit[1].equals("PRIVMSG") && line.contains(":")) {
+                String response = null;
+                String userMessage = line.substring(line.indexOf(":" + control) + 2, line.length()-1);
+                if (userMessage.startsWith("PING ")) {
+                    response = userMessage;
+                    sendMessage("NOTICE " + this.getNickname(messageSender) + " :" + control + response + control,false);
+                    return;
+                }
+            }
 
+            switch (lineSplit[1]) {
+                case "NOTICE":
+                case "PRIVMSG":
+                    String message = this.considerColon(StringUtil.combine(lineSplit,3));
+                    System.out.println("Message from " + this.getNickname(messageSender) + ": " + message);
+                    break;
+                case "INVITE":
+                    if (this.channels.contains(lineSplit[3]) && lineSplit[3].equals(this.nickname)) {
+                        this.sendMessage("JOIN " + lineSplit[3], false);
+                    }
+                    break;
+                case "KICK":
+                    System.out.println("User " + this.getNickname(messageSender) + " has been kicked");
+                    break;
+                case "NICK":
+                case "JOIN":
+                case "PART":
+                case "QUIT":
+                case "MODE":
+                    break;
+                    default:
+                        System.out.println("Not implemented: " + line);
+            }
         }
-
-
-
-
-
-
-
-
-
     }
 
     private String getNickname(String nickname) {
